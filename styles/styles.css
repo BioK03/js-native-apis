@@ -1,0 +1,52 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+    display: block;
+
+    font-family: 'Open Sans', sans-serif;
+}
+
+section {
+    float: left;
+    height: 19%;
+    margin-top: 0;
+    margin-bottom: 0;
+    border: 1px solid #CCCCCC;
+}
+
+.sect1 {
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 31.33%;
+}
+
+.sect2 {
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 64%;
+}
+
+section h1 {
+    width: 100%;
+    background-color: #CCCCCC;
+    font-size: 1.5em;
+    margin: 0;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+section div {
+    width: calc(100% - 1em);
+    display: block;
+    height: calc(100% - 3em);
+    padding: 0.5em;
+}
+
+.divider {
+    float: left;
+    height: 1em;
+    width: 100%;
+    display: block;
+}
