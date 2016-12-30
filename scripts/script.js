@@ -1,16 +1,35 @@
 /**
  * author: Bertrand CHOUBERT
- * credits : https://gist.github.com/mirontoli/4722797 | http://jsfiddle.net/ChristianL/AVyND/ | http://www.w3schools.com/ | https://developer.mozilla.org 
+ * credits : https://gist.github.com/mirontoli/4722797 | http://jsfiddle.net/ChristianL/AVyND/ | http://www.w3schools.com/ | https://developer.mozilla.org |https://web.wurfl.io/#wurfl-js 
  */
 var nativeAPIs = {
     printBattery: function(){
 
-        navigator.getBattery().then(function(battery) {           
-
+        navigator.getBattery().then(function(battery) {
+            
             document.getElementById("battery").innerHTML = "Battery level: "+Math.floor(battery.level * 100) + "%, "
                     +(battery.charging ? 
                         "Plugged in, "+((battery.chargingTime == Infinity)?"Not charging":" ("+nativeAPIs.toHHMMSS(battery.chargingTime)+" to the complete charge)") : 
                         "Discharging"+((battery.dischargingTime != Infinity)? " ("+nativeAPIs.toHHMMSS(battery.dischargingTime)+" remaining"+")":"" ));
+            if(battery.charging){
+                document.getElementById("batteryPlug").className += "fa fa-plug";
+            }
+
+            if(battery.level < 0.13){
+                document.getElementById("batteryIcon").className += "fa fa-battery-empty";
+            }
+            if(battery.level >= 0.13 && battery.level < 0.37){
+                document.getElementById("batteryIcon").className += "fa fa-battery-quarter";
+            }
+            if(battery.level >= 0.37 && battery.level < 0.66){
+                document.getElementById("batteryIcon").className += "fa fa-battery-half";
+            }
+            if(battery.level >= 0.66 && battery.level < 0.87){
+                document.getElementById("batteryIcon").className += "fa fa-battery-three-quarters";
+            }
+            if(battery.level >= 0.87){
+                document.getElementById("batteryIcon").className += "fa fa-battery-full";
+            }
 
         }, function(){
             var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery || navigator.msBattery;
@@ -21,7 +40,27 @@ var nativeAPIs = {
                     +(battery.charging ? 
                         "Plugged in, "+((battery.chargingTime == Infinity)?"Not charging":" ("+nativeAPIs.toHHMMSS(battery.chargingTime)+" to the complete charge)") : 
                         "Discharging"+((battery.dischargingTime != Infinity)? " ("+nativeAPIs.toHHMMSS(battery.dischargingTime)+" remaining"+")":"" ));
-                
+
+                if(battery.charging){
+                    document.getElementById("batteryPlug").className += "fa fa-plug";
+                }
+
+                if(battery.level < 0.13){
+                    document.getElementById("batteryIcon").className += "fa fa-battery-empty";
+                }
+                if(battery.level >= 0.13 && battery.level < 0.37){
+                    document.getElementById("batteryIcon").className += "fa fa-battery-quarter";
+                }
+                if(battery.level >= 0.37 && battery.level < 0.66){
+                    document.getElementById("batteryIcon").className += "fa fa-battery-half";
+                }
+                if(battery.level >= 0.66 && battery.level < 0.87){
+                    document.getElementById("batteryIcon").className += "fa fa-battery-three-quarters";
+                }
+                if(battery.level >= 0.87){
+                    document.getElementById("batteryIcon").className += "fa fa-battery-full";
+                }
+                    
             } else {
                 document.getElementById("battery").innerHTML = "No battery found. Are you on a desktop computer ?";
             }
@@ -29,7 +68,11 @@ var nativeAPIs = {
 
     },
     printScreenResolution: function(){
-        document.getElementById("resolution").innerHTML = "Resolution: "+screen.width+"px <i class='fa fa-times' aria-hidden='true'></i> "+screen.height+"px";
+        document.getElementById("resolution").innerHTML = "Resolution: "+screen.width+"px <i class='fa fa-times' aria-hidden='true'></i> "+screen.height+"px "
+            +((screen.width > screen.height)?"(Landscape)":"(Portrait)");
+        
+        var nVer = navigator.appVersion;
+        document.getElementById("screenIcon").className += /Mobile|mini|Fennec|Android|iP(ad|od|hone)/.test(nVer)?"fa fa-mobile":"fa fa-desktop";
     },
 
     lastLoop: null,
@@ -64,7 +107,7 @@ var nativeAPIs = {
         return hours+':'+minutes+':'+seconds;
     },
     printIP: function(){
-        document.getElementById("network").innerHTML = ", IP : "+userIp;
+        document.getElementById("network").innerHTML = ", Public IP : "+userIp;
     },
     printLanguage: function(){
         var userLanguage = navigator.language || navigator.userLanguage;
@@ -118,27 +161,32 @@ var nativeAPIs = {
         }
 
         var osVersion = "-";
+        var icon = "";
 
         if (/Windows/.test(os)) {
             osVersion = /Windows (.*)/.exec(os)[1];
+            icon = "windows";
             os = 'Windows';
         }
 
         switch (os) {
             case 'Mac OS X':
                 osVersion = /Mac OS X (10[\.\_\d]+)/.exec(nAgt)[1];
+                icon = "apple";
                 break;
 
             case 'Android':
                 osVersion = /Android ([\.\_\d]+)/.exec(nAgt)[1];
+                icon = "android"
                 break;
 
             case 'iOS':
                 osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer);
                 osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
+                icon = "apple";
                 break;
         }
-        document.getElementById("os").innerHTML = ", "+os+" "+osVersion;
+        document.getElementById("os").innerHTML = ", <i class='fa fa-"+icon+"'></i> "+os+" "+osVersion;
     },
     printCookieConfiguration: function(){
         var cookieEnabled = (navigator.cookieEnabled) ? true : false;
@@ -221,11 +269,8 @@ var nativeAPIs = {
             version = '' + parseFloat(navigator.appVersion);
             majorVersion = parseInt(navigator.appVersion, 10);
         }
-        document.getElementById("browser").innerHTML = ", "+browser+" "+majorVersion+" ("+ version + ")";
-    },
-    printMobile: function(){
-        var nVer = navigator.appVersion;
-        document.getElementById("mobile").innerHTML = /Mobile|mini|Fennec|Android|iP(ad|od|hone)/.test(nVer)?"Mobile or Tablet":"Desktop computer";
+        document.getElementById("browser").innerHTML = ", <i class='fa fa-"+browser.toLowerCase()+"'></i> "+browser+" "+majorVersion+" ("+ version + ")";
+        document.getElementById("browserIcon").className += "fa fa-"+browser.toLowerCase();
     },
     printMediaDevices: function(){
         var mediaDevices = {audioinput: 0, audiooutput: 0, videoinput: 0, videooutput: 0};
@@ -235,8 +280,8 @@ var nativeAPIs = {
                 mediaDevices[device.kind]++;
             });
 
-            document.getElementById("media").innerHTML = ", Video Devices (Input: "+mediaDevices.videoinput+", Output: "+mediaDevices.videooutput+"),"
-                +" Audio Devices (Input: "+mediaDevices.audioinput+", Output: "+mediaDevices.audiooutput+")";
+            document.getElementById("media").innerHTML = ", <i class='fa fa-film' aria-hidden='true'></i> Video Devices (Input: "+mediaDevices.videoinput+", Output: "+mediaDevices.videooutput+"),"
+                +" <i class='fa fa-headphones'' aria-hidden='true'></i> Audio Devices (Input: "+mediaDevices.audioinput+", Output: "+mediaDevices.audiooutput+")";
         });        
     },
     printFlashVersion: function(){
@@ -260,7 +305,6 @@ var nativeAPIs = {
         }
     },
     printEffectiveLocation: function(position){
-        document.getElementById("coords").innerHTML = "Latitude: "+Math.floor(position.coords.latitude*100)/100+", Longitude: "+Math.floor(position.coords.longitude*100)/100;
         nativeAPIs.printAddress(position.coords.latitude, position.coords.longitude, "fr");
     },
     printLocationErrors: function(error){
@@ -270,12 +314,44 @@ var nativeAPIs = {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                console.log(JSON.parse(this.responseText));
-                document.getElementById("address").innerHTML = "Address : "+JSON.parse(this.responseText).results[0].formatted_address;
+                var gpsPointFormatted = "Latitude: "+Math.floor(lat*100)/100+", Longitude: "+Math.floor(lng*100)/100;
+
+                var gpsPoint = new google.maps.LatLng(lat, lng);
+                var mapOptions = {
+                    center: gpsPoint,
+                    zoom: 10
+                };
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: "<div id='iwContent'><strong>"+JSON.parse(this.responseText).results[0].formatted_address+"</strong><br>"+gpsPointFormatted+"</div>"
+                });
+                
+                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                var marker = new google.maps.Marker({
+                    position: gpsPoint,
+                    map: map,
+                    title: JSON.parse(this.responseText).results[0].formatted_address+"<br>"+gpsPointFormatted
+                });
+                marker.addListener('click', function(){
+                    infowindow.open(map, marker);
+                });
+                infowindow.open(map, marker);
             }
         };
         xhttp.open("GET", "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&key=AIzaSyDYwAfzSdJzniL-p00-qToAyLuGptOdRlc&language="+language, true);
         xhttp.send();
+
+        
+    },
+    printDeviceName: function(){
+        // Copyright 2016 - ScientiaMobile, Inc., Reston, VA
+        // WURFL Device Detection
+        // Terms of service:
+        // http://web.wurfl.io/license
+        eval(function(p,a,c,k,e,d){e=function(c){return c};if(!''.replace(/^/,String)){while(c--){d[c]=k[c]||c}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('8 7={"6":5,"4":"3 2","1":"0"};',9,9,'Desktop|form_factor|Chrome|Google|complete_device_name|false|is_mobile|WURFL|var'.split('|'),0,{}));
+
+        console.log(WURFL);
+        document.getElementById("mobile").innerHTML = "Device : "+WURFL.form_factor+" ( "+WURFL.complete_device_name+" )";
     }
 };
 
@@ -290,9 +366,9 @@ var nativeAPIs = {
     nativeAPIs.printOS();
     nativeAPIs.printCookieConfiguration();
     nativeAPIs.printBrowserVersion();
-    nativeAPIs.printMobile();
     nativeAPIs.printMediaDevices();
     nativeAPIs.printFlashVersion();
     nativeAPIs.printLocation();
+    nativeAPIs.printDeviceName();
 
 })();
