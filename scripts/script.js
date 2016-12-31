@@ -284,19 +284,6 @@ var nativeAPIs = {
                 +" <i class='fa fa-headphones'' aria-hidden='true'></i> Audio Devices (Input: "+mediaDevices.audioinput+", Output: "+mediaDevices.audiooutput+")";
         });        
     },
-    printFlashVersion: function(){
-        var flashVersion = 'no check';
-        if (typeof swfobject != 'undefined') {
-            var fv = swfobject.getFlashPlayerVersion();
-            if (fv.major > 0) {
-                flashVersion = fv.major + '.' + fv.minor + ' r' + fv.release;
-            }
-            else  {
-                flashVersion = unknown;
-            }
-        }
-        document.getElementById("flash").innerHTML = ", Flash Version : "+flashVersion;
-    },
     printLocation: function(){
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(nativeAPIs.printEffectiveLocation, nativeAPIs.printLocationErrors);
@@ -360,7 +347,6 @@ var nativeAPIs = {
     nativeAPIs.printCookieConfiguration();
     nativeAPIs.printBrowserVersion();
     nativeAPIs.printMediaDevices();
-    nativeAPIs.printFlashVersion();
     nativeAPIs.printLocation();
     nativeAPIs.printDeviceName();
 
