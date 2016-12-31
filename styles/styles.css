@@ -89,6 +89,12 @@ footer {
     display: block;
 }
 
+video {
+    height: calc(100% - 3em);
+    width: 100%;
+    display: block;
+}
+
 @media only screen and (max-width: 900px) {
     .sect50 {
         width: 47% !important;

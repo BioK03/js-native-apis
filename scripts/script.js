@@ -332,6 +332,23 @@ var nativeAPIs = {
     },
     printDeviceName: function(){
         document.getElementById("mobile").innerHTML = "Device : "+WURFL.form_factor+" ( "+WURFL.complete_device_name+" )";
+    },
+    printWebcam: function(){
+        var video = document.querySelector("#videoElement");
+ 
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+        
+        if (navigator.getUserMedia) {       
+            navigator.getUserMedia({video: true}, handleVideo, videoError);
+        }
+        
+        function handleVideo(stream) {
+            video.src = window.URL.createObjectURL(stream);
+        }
+        
+        function videoError(e) {
+            // do something
+        }
     }
 };
 
@@ -349,5 +366,6 @@ var nativeAPIs = {
     nativeAPIs.printMediaDevices();
     nativeAPIs.printLocation();
     nativeAPIs.printDeviceName();
+    nativeAPIs.printWebcam();
 
 })();

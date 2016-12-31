@@ -6,7 +6,7 @@
             flashVersion = fv.major + '.' + fv.minor + ' r' + fv.release;
         }
         else  {
-            flashVersion = unknown;
+            flashVersion = "Not compatible with Flash";
         }
     }
     document.getElementById("flash").innerHTML = ", Flash Version : "+flashVersion;
