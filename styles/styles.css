@@ -38,7 +38,7 @@ section h1 {
     color: #FFFFFF;
 }
 
-section > div {
+section > div, section > canvas {
     width: calc(100% - 1em);
     display: block;
     height: calc(100% - 3em);

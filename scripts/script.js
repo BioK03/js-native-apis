@@ -1,6 +1,7 @@
 /**
  * author: Bertrand CHOUBERT
- * credits : https://gist.github.com/mirontoli/4722797 | http://jsfiddle.net/ChristianL/AVyND/ | http://www.w3schools.com/ | https://developer.mozilla.org |https://web.wurfl.io/#wurfl-js 
+ * credits : https://gist.github.com/mirontoli/4722797 | http://jsfiddle.net/ChristianL/AVyND/ | http://www.w3schools.com/ | https://developer.mozilla.org 
+ *          | https://web.wurfl.io/#wurfl-js |http://stackoverflow.com/questions/16724414/microphone-activity-level-of-webrtc-mediastream 
  */
 var nativeAPIs = {
     printBattery: function(){
@@ -349,6 +350,52 @@ var nativeAPIs = {
         function videoError(e) {
             // do something
         }
+    },
+    printMicro: function(){
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+        if (navigator.getUserMedia) {
+            navigator.getUserMedia({ audio: true },
+            function(stream) {
+                console.log("Accessed the Microphone");
+                audioContext = new AudioContext();
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+                analyser.smoothingTimeConstant = 0.3;
+                analyser.fftSize = 1024;
+
+                microphone.connect(analyser);
+                analyser.connect(javascriptNode);
+                javascriptNode.connect(audioContext.destination);
+
+                canvasContext = document.getElementById("micro").getContext("2d");
+                
+                javascriptNode.onaudioprocess = function() {
+                    var array =  new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(array);
+                    var values = 0;
+
+                    var length = array.length;
+                    for (var i = 0; i < length; i++) {
+                        values += array[i];
+                    }
+
+                    var average = values / length;
+                    canvasContext.clearRect(0, 0, 200, 130);
+                    canvasContext.fillStyle = '#00ff00';
+                    canvasContext.fillRect(0,130-average,200,130);
+                }
+
+            },
+            function(err) {
+                console.log("The following error occured: " + err.name);
+            }
+            );
+        } else {
+        console.log("getUserMedia not supported");
+        }
     }
 };
 
@@ -367,5 +414,5 @@ var nativeAPIs = {
     nativeAPIs.printLocation();
     nativeAPIs.printDeviceName();
     nativeAPIs.printWebcam();
-
+    nativeAPIs.printMicro();
 })();
