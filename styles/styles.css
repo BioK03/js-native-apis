@@ -95,7 +95,7 @@ video {
     display: block;
 }
 
-@media only screen and (max-width: 900px) {
+@media (max-width: 900px) {
     .sect50 {
         width: 47% !important;
     }
@@ -110,5 +110,8 @@ video {
 
     .lg-only {
         display: none !important;
+    }
+    body {
+        font-size: 200%;
     }
 }

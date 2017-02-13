@@ -357,7 +357,6 @@ var nativeAPIs = {
         if (navigator.getUserMedia) {
             navigator.getUserMedia({ audio: true },
             function(stream) {
-                console.log("Accessed the Microphone");
                 audioContext = new AudioContext();
                 analyser = audioContext.createAnalyser();
                 microphone = audioContext.createMediaStreamSource(stream);
