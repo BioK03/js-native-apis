@@ -186,6 +186,9 @@ var nativeAPIs = {
                 osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
                 icon = "apple";
                 break;
+            case 'Linux':
+                icon = "linux";
+                break;
         }
         document.getElementById("os").innerHTML = ", <i class='fa fa-"+icon+"'></i> "+os+" "+osVersion;
     },
