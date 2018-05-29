@@ -182,7 +182,7 @@ var nativeAPIs = {
                 break;
 
             case 'iOS':
-                osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer);
+                osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nAgt);
                 osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
                 icon = "apple";
                 break;
